@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "367788347046",
+    "project_id": "myapp-7d274",
+    "storage_bucket": "myapp-7d274.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367788347046:android:fa6bb4ccc9afcea7bb6e67",
+        "android_client_info": {
+          "package_name": "ru.myrkwill.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "367788347046-rijq561rv4rq9u4oir96r0iopcehpor9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByRWq4DwvmTCV29gdTg6ORwTcYeA1G59k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "367788347046-rijq561rv4rq9u4oir96r0iopcehpor9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
