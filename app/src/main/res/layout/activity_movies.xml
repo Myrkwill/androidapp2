@@ -4,6 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegistrationActivity">
+    tools:context=".MoviesActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/movies_activity_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:itemCount="5"
+        tools:listitem="@layout/card_view_design" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
