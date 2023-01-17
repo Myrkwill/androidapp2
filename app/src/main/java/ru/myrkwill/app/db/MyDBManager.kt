@@ -3,6 +3,7 @@ package ru.myrkwill.app.db
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.util.Log
 
 class MyDBManager(val context: Context) {
 
@@ -13,13 +14,14 @@ class MyDBManager(val context: Context) {
         db = myDBHelper.writableDatabase
     }
 
-    fun insert(title: String, content: String) {
+    fun insert(title: String, content: String, uri: String) {
         val values = ContentValues().apply {
             put(MyDBNameClass.COLUMN_NAME_TITLE, title)
             put(MyDBNameClass.COLUMN_NAME_CONTENT, content)
+            put(MyDBNameClass.COLUMN_NAME_IMAGE_URI, uri)
         }
-
-        db?.insert(MyDBNameClass.DATABASE_NAME, null, values)
+        Log.d("MyTag", "save in $db")
+        db?.insert(MyDBNameClass.TABLE_NAME, null, values)
     }
 
     fun read(): ArrayList<String> {
