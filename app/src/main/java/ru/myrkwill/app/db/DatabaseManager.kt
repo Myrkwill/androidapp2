@@ -24,8 +24,9 @@ class DatabaseManager(val context: Context) {
         db?.insert(DatabaseConstant.TABLE_NAME, null, values)
     }
 
-    fun read(): ArrayList<String> {
-        val dataList = ArrayList<String>()
+    fun read(): ArrayList<ListItem> {
+        Log.d("MyTag", "Start read from Database")
+        val dataList = ArrayList<ListItem>()
 
         val cursor = db?.query(
             DatabaseConstant.TABLE_NAME,
@@ -38,14 +39,20 @@ class DatabaseManager(val context: Context) {
         )
 
         while (cursor?.moveToNext()!!) {
-            val index = cursor.getColumnIndex(DatabaseConstant.COLUMN_NAME_TITLE)
-            val dataText = cursor.getString(index)
-            Log.d("MyTag", "${dataText.toString()}")
-            dataList.add(dataText.toString())
+            val titleIndex = cursor.getColumnIndex(DatabaseConstant.COLUMN_NAME_TITLE)
+            val contentIndex = cursor.getColumnIndex(DatabaseConstant.COLUMN_NAME_CONTENT)
+            val uriIndex = cursor.getColumnIndex(DatabaseConstant.COLUMN_NAME_IMAGE_URI)
+            val title = cursor.getString(titleIndex)
+            val content = cursor.getString(contentIndex)
+            val uri = cursor.getString(uriIndex)
+            val item = ListItem()
+            item.title = title.toString()
+            item.desc = content.toString()
+            item.uri = uri.toString()
+            dataList.add(item)
         }
         cursor.close()
-
-        Log.d("MyTag", "${dataList}")
+        Log.d("MyTag", "Start end from Database")
 
         return dataList
     }

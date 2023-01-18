@@ -12,9 +12,8 @@ import ru.myrkwill.app.db.RecyclerAdapter
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
     private val databaseManager = DatabaseManager(this)
-    private val recyclerAdapter = RecyclerAdapter(ArrayList())
+    private val recyclerAdapter = RecyclerAdapter(ArrayList(), this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,12 +38,18 @@ class MainActivity : AppCompatActivity() {
         databaseManager.close()
     }
 
-    fun init() = with(binding) {
+    private fun init() = with(binding) {
         rcView.layoutManager = LinearLayoutManager(this@MainActivity)
         rcView.adapter = recyclerAdapter
     }
 
-    fun fillAdapter() {
-        recyclerAdapter.update(databaseManager.read())
+    private fun fillAdapter() = with(binding) {
+        val list = databaseManager.read()
+        recyclerAdapter.update(list)
+        if(list.isNotEmpty()) {
+            tvNoElements.visibility = View.GONE
+        } else {
+            tvNoElements.visibility = View.VISIBLE
+        }
     }
 }
