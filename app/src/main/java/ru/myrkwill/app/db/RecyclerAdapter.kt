@@ -31,6 +31,14 @@ class RecyclerAdapter(private var list: ArrayList<ListItem>, private val context
         notifyDataSetChanged()
     }
 
+    fun removeItem(position: Int, databaseManager: DatabaseManager) {
+        databaseManager.removeItem(list[position].id.toString())
+        list.removeAt(position)
+        Log.d("MyTag", "Remove items")
+        notifyItemRangeChanged(0, list.size)
+        notifyItemRemoved(position)
+    }
+
     class Holder(private val binding: RcItemBinding, val context: Context): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: ListItem) = with(binding) {

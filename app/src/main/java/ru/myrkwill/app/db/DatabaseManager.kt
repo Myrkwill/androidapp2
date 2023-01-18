@@ -3,6 +3,7 @@ package ru.myrkwill.app.db
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.provider.BaseColumns
 import android.util.Log
 
 class DatabaseManager(val context: Context) {
@@ -24,6 +25,12 @@ class DatabaseManager(val context: Context) {
         db?.insert(DatabaseConstant.TABLE_NAME, null, values)
     }
 
+    fun removeItem(id: String) {
+        Log.d("MyTag", "remove item by id: $id")
+        val selection = BaseColumns._ID + "=$id"
+        db?.delete(DatabaseConstant.TABLE_NAME, selection, null)
+    }
+
     fun read(): ArrayList<ListItem> {
         Log.d("MyTag", "Start read from Database")
         val dataList = ArrayList<ListItem>()
@@ -39,16 +46,19 @@ class DatabaseManager(val context: Context) {
         )
 
         while (cursor?.moveToNext()!!) {
+            val idIndex = cursor.getColumnIndex(BaseColumns._ID)
             val titleIndex = cursor.getColumnIndex(DatabaseConstant.COLUMN_NAME_TITLE)
             val contentIndex = cursor.getColumnIndex(DatabaseConstant.COLUMN_NAME_CONTENT)
             val uriIndex = cursor.getColumnIndex(DatabaseConstant.COLUMN_NAME_IMAGE_URI)
+            val id = cursor.getInt(idIndex)
             val title = cursor.getString(titleIndex)
             val content = cursor.getString(contentIndex)
             val uri = cursor.getString(uriIndex)
             val item = ListItem()
-            item.title = title.toString()
-            item.desc = content.toString()
-            item.uri = uri.toString()
+            item.id = id
+            item.title = title
+            item.desc = content
+            item.uri = uri
             dataList.add(item)
         }
         cursor.close()

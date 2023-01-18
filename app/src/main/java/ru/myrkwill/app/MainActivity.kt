@@ -4,7 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ru.myrkwill.app.databinding.ActivityMainBinding
 import ru.myrkwill.app.db.DatabaseManager
 import ru.myrkwill.app.db.RecyclerAdapter
@@ -40,6 +42,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun init() = with(binding) {
         rcView.layoutManager = LinearLayoutManager(this@MainActivity)
+        val swapHelper = swapHelper()
+        swapHelper.attachToRecyclerView(rcView)
         rcView.adapter = recyclerAdapter
     }
 
@@ -51,5 +55,23 @@ class MainActivity : AppCompatActivity() {
         } else {
             tvNoElements.visibility = View.VISIBLE
         }
+    }
+
+    private fun swapHelper(): ItemTouchHelper {
+        return ItemTouchHelper(object:
+            ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                recyclerAdapter.removeItem(viewHolder.bindingAdapterPosition, databaseManager)
+            }
+        })
     }
 }

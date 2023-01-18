@@ -18,8 +18,11 @@ class EditActivity : AppCompatActivity() {
     private var imageUri = "empty"
 
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        imageUri = uri.toString()
-        binding.imageView.setImageURI(uri)
+        uri?.let {
+            imageUri = uri.toString()
+            binding.imageView.setImageURI(uri)
+            grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,18 +74,16 @@ class EditActivity : AppCompatActivity() {
         if(i != null) {
             val title = i.getStringExtra(IntentConstant.INTENT_TITLE_KEY)
             if(title != null) {
-                Log.d("MyTag", "Title $title")
                 fbAddImage.visibility = View.GONE
                 edTitle.setText(title)
                 edDisc.setText(i.getStringExtra(IntentConstant.INTENT_DESK_KEY))
-//                TODO:
-//                val uri = i.getStringExtra(IntentConstant.INTENT_URI_KEY)
-//                if(uri != "empty") {
-//                    mainImageLayout.visibility = View.VISIBLE
-//                    imButtonDeleteImage.visibility = View.GONE
-//                    imButtonEditImage.visibility = View.GONE
-//                    imageView.setImageURI(Uri.parse(uri))
-//                }
+                val uri = i.getStringExtra(IntentConstant.INTENT_URI_KEY)
+                if(uri != "empty") {
+                    mainImageLayout.visibility = View.VISIBLE
+                    imButtonDeleteImage.visibility = View.GONE
+                    imButtonEditImage.visibility = View.GONE
+                    imageView.setImageURI(Uri.parse(uri))
+                }
             }
         }
     }
