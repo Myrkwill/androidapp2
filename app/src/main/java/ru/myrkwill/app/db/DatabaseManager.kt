@@ -5,30 +5,30 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 
-class MyDBManager(val context: Context) {
+class DatabaseManager(val context: Context) {
 
-    val myDBHelper = MyDBHelper(context)
+    val databaseHelper = DatabaseHelper(context)
     var db: SQLiteDatabase? = null
 
     fun open() {
-        db = myDBHelper.writableDatabase
+        db = databaseHelper.writableDatabase
     }
 
     fun insert(title: String, content: String, uri: String) {
         val values = ContentValues().apply {
-            put(MyDBNameClass.COLUMN_NAME_TITLE, title)
-            put(MyDBNameClass.COLUMN_NAME_CONTENT, content)
-            put(MyDBNameClass.COLUMN_NAME_IMAGE_URI, uri)
+            put(DatabaseConstant.COLUMN_NAME_TITLE, title)
+            put(DatabaseConstant.COLUMN_NAME_CONTENT, content)
+            put(DatabaseConstant.COLUMN_NAME_IMAGE_URI, uri)
         }
         Log.d("MyTag", "save in $db")
-        db?.insert(MyDBNameClass.TABLE_NAME, null, values)
+        db?.insert(DatabaseConstant.TABLE_NAME, null, values)
     }
 
     fun read(): ArrayList<String> {
         val dataList = ArrayList<String>()
 
         val cursor = db?.query(
-            MyDBNameClass.DATABASE_NAME,
+            DatabaseConstant.TABLE_NAME,
             null,
             null,
             null,
@@ -38,16 +38,19 @@ class MyDBManager(val context: Context) {
         )
 
         while (cursor?.moveToNext()!!) {
-            val index = cursor.getColumnIndex(MyDBNameClass.COLUMN_NAME_TITLE)
+            val index = cursor.getColumnIndex(DatabaseConstant.COLUMN_NAME_TITLE)
             val dataText = cursor.getString(index)
+            Log.d("MyTag", "${dataText.toString()}")
             dataList.add(dataText.toString())
         }
         cursor.close()
+
+        Log.d("MyTag", "${dataList}")
 
         return dataList
     }
 
     fun close() {
-        myDBHelper.close()
+        databaseHelper.close()
     }
 }

@@ -2,7 +2,7 @@ package ru.myrkwill.app.db
 
 import android.provider.BaseColumns
 
-object MyDBNameClass: BaseColumns {
+object DatabaseConstant: BaseColumns {
     const val TABLE_NAME = "my_table"
     const val COLUMN_NAME_TITLE = "title"
     const val COLUMN_NAME_CONTENT = "content"

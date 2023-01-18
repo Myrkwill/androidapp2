@@ -4,20 +4,29 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import ru.myrkwill.app.db.MyDBManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import ru.myrkwill.app.databinding.ActivityMainBinding
+import ru.myrkwill.app.db.DatabaseManager
+import ru.myrkwill.app.db.RecyclerAdapter
 
 class MainActivity : AppCompatActivity() {
 
-    private val myDBManager = MyDBManager(this)
+    private lateinit var binding: ActivityMainBinding
+
+    private val databaseManager = DatabaseManager(this)
+    private val recyclerAdapter = RecyclerAdapter(ArrayList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        init()
     }
 
     override fun onResume() {
         super.onResume()
-        myDBManager.open()
+        databaseManager.open()
+        fillAdapter()
     }
 
     fun onClickNew(view: View) {
@@ -27,6 +36,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        myDBManager.close()
+        databaseManager.close()
+    }
+
+    fun init() = with(binding) {
+        rcView.layoutManager = LinearLayoutManager(this@MainActivity)
+        rcView.adapter = recyclerAdapter
+    }
+
+    fun fillAdapter() {
+        recyclerAdapter.update(databaseManager.read())
     }
 }

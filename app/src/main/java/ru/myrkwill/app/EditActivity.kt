@@ -1,21 +1,19 @@
 package ru.myrkwill.app
 
-import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import ru.myrkwill.app.databinding.ActivityEditBinding
-import ru.myrkwill.app.db.MyDBManager
+import ru.myrkwill.app.db.DatabaseManager
 
 class EditActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditBinding
 
-    private val myDBManager = MyDBManager(this)
+    private val databaseManager = DatabaseManager(this)
 
     private var imageUri = "empty"
 
@@ -33,12 +31,12 @@ class EditActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        myDBManager.open()
+        databaseManager.open()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        myDBManager.close()
+        databaseManager.close()
     }
 
     fun onClickAddImage(view: View) = with(binding) {
@@ -61,7 +59,7 @@ class EditActivity : AppCompatActivity() {
 
         if(title.isNotEmpty() && desc.isNotEmpty()) {
             Log.d("MyTag", "save $title, $desc")
-            myDBManager.insert(title, desc, imageUri)
+            databaseManager.insert(title, desc, imageUri)
         }
     }
 }
