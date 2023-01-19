@@ -13,6 +13,8 @@ import ru.myrkwill.app.db.IntentConstant
 
 class EditActivity : AppCompatActivity() {
 
+    private var id = ""
+    private var isEditState = false
     private lateinit var binding: ActivityEditBinding
     private val databaseManager = DatabaseManager(this)
     private var imageUri = "empty"
@@ -51,6 +53,7 @@ class EditActivity : AppCompatActivity() {
     fun onClickDeleteImage(view: View) = with(binding) {
         mainImageLayout.visibility = View.GONE
         fbAddImage.visibility = View.VISIBLE
+        imageUri = "empty"
     }
 
     fun onClickChooseImage(view: View) = with(binding) {
@@ -62,8 +65,13 @@ class EditActivity : AppCompatActivity() {
         val desc = edDisc.text.toString()
 
         if(title.isNotEmpty() && desc.isNotEmpty()) {
-            Log.d("MyTag", "Save $title, $desc, $imageUri")
-            databaseManager.insert(title, desc, imageUri)
+            if(isEditState) {
+                Log.d("MyTag", "Update item: $title, $desc, $imageUri")
+                databaseManager.updateItem(id, title, desc, imageUri)
+            } else {
+                Log.d("MyTag", "Save item: $title, $desc, $imageUri")
+                databaseManager.insert(title, desc, imageUri)
+            }
             finish()
         }
     }
@@ -74,15 +82,15 @@ class EditActivity : AppCompatActivity() {
         if(i != null) {
             val title = i.getStringExtra(IntentConstant.INTENT_TITLE_KEY)
             if(title != null) {
-                fbAddImage.visibility = View.GONE
+                isEditState = true
+                id = i.getIntExtra(IntentConstant.INTENT_ID_KEY, 0).toString()
                 edTitle.setText(title)
                 edDisc.setText(i.getStringExtra(IntentConstant.INTENT_DESK_KEY))
-                val uri = i.getStringExtra(IntentConstant.INTENT_URI_KEY)
-                if(uri != "empty") {
+                imageUri = i.getStringExtra(IntentConstant.INTENT_URI_KEY)!!
+                if(imageUri != "empty") {
+                    fbAddImage.visibility = View.GONE
                     mainImageLayout.visibility = View.VISIBLE
-                    imButtonDeleteImage.visibility = View.GONE
-                    imButtonEditImage.visibility = View.GONE
-                    imageView.setImageURI(Uri.parse(uri))
+                    imageView.setImageURI(Uri.parse(imageUri))
                 }
             }
         }

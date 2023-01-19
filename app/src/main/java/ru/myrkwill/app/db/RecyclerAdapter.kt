@@ -45,6 +45,7 @@ class RecyclerAdapter(private var list: ArrayList<ListItem>, private val context
             tvTitle.text = item.title
             binding.root.setOnClickListener {
                 val intent = Intent(context, EditActivity::class.java).apply {
+                    putExtra(IntentConstant.INTENT_ID_KEY, item.id)
                     putExtra(IntentConstant.INTENT_TITLE_KEY, item.title)
                     putExtra(IntentConstant.INTENT_DESK_KEY, item.desc)
                     putExtra(IntentConstant.INTENT_URI_KEY, item.uri)

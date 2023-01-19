@@ -31,6 +31,18 @@ class DatabaseManager(val context: Context) {
         db?.delete(DatabaseConstant.TABLE_NAME, selection, null)
     }
 
+    fun updateItem(id: String, title: String, content: String, uri: String) {
+        val selection = BaseColumns._ID + "=$id"
+        val values = ContentValues().apply {
+            put(DatabaseConstant.COLUMN_NAME_TITLE, title)
+            put(DatabaseConstant.COLUMN_NAME_CONTENT, content)
+            put(DatabaseConstant.COLUMN_NAME_IMAGE_URI, uri)
+        }
+
+        Log.d("MyTag", "save in $db")
+        db?.update(DatabaseConstant.TABLE_NAME, values, selection, null)
+    }
+
     fun read(searchText: String): ArrayList<ListItem> {
         Log.d("MyTag", "Start read from Database")
         val dataList = ArrayList<ListItem>()
@@ -64,7 +76,7 @@ class DatabaseManager(val context: Context) {
             dataList.add(item)
         }
         cursor.close()
-        Log.d("MyTag", "Start end from Database")
+        Log.d("MyTag", "End read from Database")
 
         return dataList
     }
