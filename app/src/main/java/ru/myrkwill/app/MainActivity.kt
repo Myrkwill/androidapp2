@@ -8,6 +8,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import ru.myrkwill.app.databinding.ActivityMainBinding
 import ru.myrkwill.app.db.DatabaseManager
 import ru.myrkwill.app.db.RecyclerAdapter
@@ -17,6 +21,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val databaseManager = DatabaseManager(this)
     private val recyclerAdapter = RecyclerAdapter(ArrayList(), this)
+
+    private var job: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         rcView.adapter = recyclerAdapter
     }
 
-    fun initSearchView() = with(binding) {
+    private fun initSearchView() = with(binding) {
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener,
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -57,20 +63,18 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                val list = databaseManager.read(newText!!)
-                recyclerAdapter.update(list)
+                fillAdapter(newText!!)
                 return true
             }
         })
     }
 
-    private fun fillAdapter() = with(binding) {
-        val list = databaseManager.read("")
-        recyclerAdapter.update(list)
-        if(list.isNotEmpty()) {
-            tvNoElements.visibility = View.GONE
-        } else {
-            tvNoElements.visibility = View.VISIBLE
+    private fun fillAdapter(text: String = "") = with(binding) {
+        job?.cancel()
+        job = CoroutineScope(Dispatchers.Main).launch {
+            val list = databaseManager.read(text)
+            recyclerAdapter.update(list)
+            tvNoElements.visibility = if (list.isNotEmpty()) View.GONE else View.VISIBLE
         }
     }
 

@@ -5,6 +5,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
 import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class DatabaseManager(val context: Context) {
 
@@ -15,7 +17,7 @@ class DatabaseManager(val context: Context) {
         db = databaseHelper.writableDatabase
     }
 
-    fun insert(title: String, content: String, uri: String) {
+    suspend fun insert(title: String, content: String, uri: String) = withContext(Dispatchers.IO) {
         val values = ContentValues().apply {
             put(DatabaseConstant.COLUMN_NAME_TITLE, title)
             put(DatabaseConstant.COLUMN_NAME_CONTENT, content)
@@ -31,7 +33,7 @@ class DatabaseManager(val context: Context) {
         db?.delete(DatabaseConstant.TABLE_NAME, selection, null)
     }
 
-    fun updateItem(id: String, title: String, content: String, uri: String) {
+    suspend fun updateItem(id: String, title: String, content: String, uri: String) = withContext(Dispatchers.IO) {
         val selection = BaseColumns._ID + "=$id"
         val values = ContentValues().apply {
             put(DatabaseConstant.COLUMN_NAME_TITLE, title)
@@ -43,7 +45,7 @@ class DatabaseManager(val context: Context) {
         db?.update(DatabaseConstant.TABLE_NAME, values, selection, null)
     }
 
-    fun read(searchText: String): ArrayList<ListItem> {
+    suspend fun read(searchText: String): ArrayList<ListItem> = withContext(Dispatchers.IO) {
         Log.d("MyTag", "Start read from Database")
         val dataList = ArrayList<ListItem>()
 
@@ -78,7 +80,7 @@ class DatabaseManager(val context: Context) {
         cursor.close()
         Log.d("MyTag", "End read from Database")
 
-        return dataList
+        return@withContext dataList
     }
 
     fun close() {

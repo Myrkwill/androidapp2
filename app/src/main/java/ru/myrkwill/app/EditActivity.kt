@@ -7,6 +7,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.myrkwill.app.databinding.ActivityEditBinding
 import ru.myrkwill.app.db.DatabaseManager
 import ru.myrkwill.app.db.IntentConstant
@@ -65,14 +68,16 @@ class EditActivity : AppCompatActivity() {
         val desc = edDisc.text.toString()
 
         if(title.isNotEmpty() && desc.isNotEmpty()) {
-            if(isEditState) {
-                Log.d("MyTag", "Update item: $title, $desc, $imageUri")
-                databaseManager.updateItem(id, title, desc, imageUri)
-            } else {
-                Log.d("MyTag", "Save item: $title, $desc, $imageUri")
-                databaseManager.insert(title, desc, imageUri)
+            CoroutineScope(Dispatchers.Main).launch {
+                if(isEditState) {
+                    Log.d("MyTag", "Update item: $title, $desc, $imageUri")
+                    databaseManager.updateItem(id, title, desc, imageUri)
+                } else {
+                    Log.d("MyTag", "Save item: $title, $desc, $imageUri")
+                    databaseManager.insert(title, desc, imageUri)
+                }
+                finish()
             }
-            finish()
         }
     }
 
