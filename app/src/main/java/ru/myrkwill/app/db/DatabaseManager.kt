@@ -8,7 +8,7 @@ import android.util.Log
 
 class DatabaseManager(val context: Context) {
 
-    val databaseHelper = DatabaseHelper(context)
+    private val databaseHelper = DatabaseHelper(context)
     var db: SQLiteDatabase? = null
 
     fun open() {
@@ -31,15 +31,17 @@ class DatabaseManager(val context: Context) {
         db?.delete(DatabaseConstant.TABLE_NAME, selection, null)
     }
 
-    fun read(): ArrayList<ListItem> {
+    fun read(searchText: String): ArrayList<ListItem> {
         Log.d("MyTag", "Start read from Database")
         val dataList = ArrayList<ListItem>()
+
+        val selection = "${DatabaseConstant.COLUMN_NAME_TITLE} like ?"
 
         val cursor = db?.query(
             DatabaseConstant.TABLE_NAME,
             null,
-            null,
-            null,
+            selection,
+            arrayOf("%$searchText%"),
             null,
             null,
             null
