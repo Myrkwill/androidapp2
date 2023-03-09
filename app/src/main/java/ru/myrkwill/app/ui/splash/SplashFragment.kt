@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.myrkwill.app.databinding.FragmentSplashBinding
 
+@AndroidEntryPoint
 class SplashFragment : Fragment() {
 
     lateinit var binding: FragmentSplashBinding
