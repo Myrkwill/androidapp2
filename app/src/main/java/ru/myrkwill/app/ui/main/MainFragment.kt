@@ -52,8 +52,10 @@ class MainFragment : Fragment() {
 
     private fun initAdapter() = with(binding) {
         newsAdapter = NewsAdapter()
-        newsRecyclerView.layoutManager = LinearLayoutManager(activity)
-        newsRecyclerView.adapter = newsAdapter
+        newsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = newsAdapter
+        }
     }
 
 }

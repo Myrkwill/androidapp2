@@ -10,7 +10,7 @@ import ru.myrkwill.app.utils.Constants
 
 interface NewsService {
 
-    @Headers("mock:true")
+//    @Headers("mock:true")
     @GET("/v2/everything")
     suspend fun getEverything(
         @Query("q") query: String,
@@ -18,7 +18,7 @@ interface NewsService {
         @Query("apiKey") apiKey: String = Constants.API_KEY
     ): Response<NewsResponse>
 
-    @Headers("mock:true")
+//    @Headers("mock:true")
     @GET("/v2/top-headlines")
     suspend fun getHeadlines(
         @Query("country") country: String = "ru",
