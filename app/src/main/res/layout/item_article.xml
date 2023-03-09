@@ -43,6 +43,7 @@
             android:textColor="@color/grayBlack"
             android:textSize="12sp"
             android:textStyle="bold"
+            app:fontWeight="700"
             tools:text="Mask invite to IR Plasadm to disscus 344 bolll" />
 
     </LinearLayout>

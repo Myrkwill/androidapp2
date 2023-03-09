@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import ru.myrkwill.app.R
 import ru.myrkwill.app.databinding.ItemArticleBinding
 import ru.myrkwill.app.models.Article
 
@@ -49,6 +50,7 @@ class NewsAdapter: RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
             articleDateTextView.text = article.publishedAt
             Glide.with(articleImageView.context)
                 .load(article.urlToImage)
+                .placeholder(R.drawable.ic_broken_image)
                 .into(articleImageView)
             articleImageView.clipToOutline = true
         }
