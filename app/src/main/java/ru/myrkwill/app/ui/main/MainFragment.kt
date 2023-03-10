@@ -5,8 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import ru.myrkwill.app.databinding.FragmentMainBinding
@@ -32,6 +34,12 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initAdapter()
+
+        newsAdapter.setOnItemClickListener {
+            val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(it)
+            view.findNavController().navigate(action)
+        }
+
         viewModel.newsLiveData.observe(viewLifecycleOwner) { response ->
             when(response) {
                is Resource.Success -> {

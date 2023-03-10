@@ -47,7 +47,11 @@
         android:id="@+id/detailsFragment"
         android:name="ru.myrkwill.app.ui.details.DetailsFragment"
         android:label="fragment_details"
-        tools:layout="@layout/fragment_details" />
+        tools:layout="@layout/fragment_details" >
+        <argument
+            android:name="article"
+            app:argType="ru.myrkwill.app.models.Article" />
+    </fragment>
     <fragment
         android:id="@+id/splashFragment"
         android:name="ru.myrkwill.app.ui.splash.SplashFragment"

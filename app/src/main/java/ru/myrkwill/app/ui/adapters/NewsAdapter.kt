@@ -53,6 +53,9 @@ class NewsAdapter: RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
                 .placeholder(R.drawable.ic_broken_image)
                 .into(articleImageView)
             articleImageView.clipToOutline = true
+            itemView.setOnClickListener {
+                onItemClickListener?.let { it(article) }
+            }
         }
     }
 }
