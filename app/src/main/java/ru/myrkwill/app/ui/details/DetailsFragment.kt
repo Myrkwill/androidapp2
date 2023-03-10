@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -22,6 +23,9 @@ import ru.myrkwill.app.databinding.FragmentDetailsBinding
 class DetailsFragment : Fragment() {
 
     lateinit var binding: FragmentDetailsBinding
+
+    private val viewModel: DetailsViewModel by viewModels()
+
     private val fragmentArgs: DetailsFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -39,6 +43,7 @@ class DetailsFragment : Fragment() {
 
     private fun setupView() = with(binding) {
         val article = fragmentArgs.article
+
         titleTextView.text = article.title
         descriptionTextView.text = article.description
         Glide.with(this@DetailsFragment)
@@ -46,6 +51,10 @@ class DetailsFragment : Fragment() {
             .placeholder(R.drawable.ic_broken_image)
             .into(headerImageView)
         headerImageView.clipToOutline = true
+
+        favoriteImageView.setOnClickListener {
+            viewModel.addToFavorite(article)
+        }
 
         backImageView.setOnClickListener { findNavController().popBackStack() }
         visitSiteButton.setOnClickListener {

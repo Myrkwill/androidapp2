@@ -1,6 +1,7 @@
 package ru.myrkwill.app.di
 
 import android.content.Context
+import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,6 +15,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.myrkwill.app.data.api.NewsService
+import ru.myrkwill.app.data.db.ArticleDao
+import ru.myrkwill.app.data.db.ArticleDatabase
 import ru.myrkwill.app.utils.Constants
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -73,5 +76,16 @@ object AppModule {
             .client(okHttpClientMock(context))
             .build()
             .create(NewsService::class.java)
+
+    @Provides
+    fun provideArticleDatabase(@ApplicationContext context: Context) =
+        Room.databaseBuilder(
+            context,
+            ArticleDatabase::class.java,
+            "article_database"
+        ).build()
+
+    @Provides
+    fun provideArticleDao(articleDatabase: ArticleDatabase) = articleDatabase.getArticleDao()
 
 }
