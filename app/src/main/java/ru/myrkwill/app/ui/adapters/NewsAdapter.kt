@@ -48,6 +48,8 @@ class NewsAdapter: RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
         fun bind(article: Article) = with(binding) {
             articleTitleTextView.text = article.title
             articleDateTextView.text = article.publishedAt
+            val image = if (article.isFavorite) R.drawable.ic_favorite_fill else R.drawable.ic_favorite
+            favoriteImageView.setImageResource(image)
             Glide.with(articleImageView.context)
                 .load(article.urlToImage)
                 .placeholder(R.drawable.ic_broken_image)

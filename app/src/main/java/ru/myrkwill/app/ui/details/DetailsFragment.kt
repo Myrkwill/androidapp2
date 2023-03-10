@@ -56,6 +56,9 @@ class DetailsFragment : Fragment() {
             viewModel.addToFavorite(article)
         }
 
+        val image = if (article.isFavorite) R.drawable.ic_favorite_fill else R.drawable.ic_favorite
+        favoriteImageView.setImageResource(image)
+
         backImageView.setOnClickListener { findNavController().popBackStack() }
         visitSiteButton.setOnClickListener {
             try {

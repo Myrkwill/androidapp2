@@ -45,7 +45,7 @@ class MainFragment : Fragment() {
                is Resource.Success -> {
                    binding.pagProgressBar.visibility = View.INVISIBLE
                    response.data?.let {
-                       newsAdapter.differ.submitList(it.articles)
+                       newsAdapter.differ.submitList(it)
                    }
                }
                is Resource.Error -> {
